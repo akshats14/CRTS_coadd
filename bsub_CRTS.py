@@ -7,11 +7,12 @@
 # Distributed under terms of the IUCAA, Pune
 
 """
-Coadds CRTS images from scp to rename and swarp.
+Coadds CRTS images. Starts from scp-ing to rename and 
+finally co-adds using swarp.
 It requires swarp_conf_varun.swarp in $HOME directory
-and Mask_S.fits in this directory.
+and Mask_S.fits in the working directory.
 
-run on perseus as:
+run on perseus cluster as follows:
 
 for i in {1..10}; do bsub -e err$i -o out$i \
 python -W ignore bsub_CRTS.py $(expr $i \* 10); done
@@ -29,6 +30,9 @@ from astropy.wcs import WCS
 index = int(sys.argv[1])
 print index
 count = index - 1
+
+ran = np.random.randint(500)
+time.sleep(ran)  # so that multiple ssh does not clash
 
 
 def clean(add):
@@ -55,11 +59,11 @@ def clean(add):
     return
 
 
-server = "project@14.139.108.116"  # passwordless ssh from cakshat@perseus
+server = "project@14.139.108.116"  # passwordless ssh from c**at@perseus
 disk_dump = "emgw@192.168.11.83:/disk2/crts/"  # passwordless ssh
 
 
-def comm(command, itern=2):
+def comm(command, itern=2, rand=10):
     """It is an iterative loop which
     avoids crash exception and breaks only
     when executed correctly
@@ -70,6 +74,8 @@ def comm(command, itern=2):
 
     """
     count_itr = 0
+    ran = np.random.random()*rand
+    time.sleep(ran)
     for itrn in np.arange(itern):
         count_itr += 1
         try:
@@ -83,11 +89,11 @@ def comm(command, itern=2):
 
 
 def get_Images(name0, num0):
-    """TODO: Gets images of required ID from CRTS import server
+    """TODO: Gets images of required field-ID from CRTS server
     to local directory with the same name.
-    1) It first copies all the files i CRTS project Home directory,
+    1) It first copies all the files in CRTS project Home directory,
     2) SCP them to local directory
-    3) Remove the same in CRTS home directory.
+    3) Remove the temp files in CRTS home directory.
     4) Saves LOG files
 
     It would have been easier and better to directly SCP it from list,
@@ -96,7 +102,7 @@ def get_Images(name0, num0):
     :name0: Name of ID
     :num0: Actual number of images
     ##  :ind: index; keeps track of iteration
-    :num0: Expected number of files based on list of all CRTS images
+    #num0: Expected number of files based on list of all CRTS images
     :returns: All .H files in local directory
 
     """
@@ -106,21 +112,23 @@ def get_Images(name0, num0):
     ts00 = time.time()
     command01 = "ssh {0} 'cat CRTS_list.txt |".format(server)
     command01 += "grep {0} |xargs -I % cp -r % ~'".format(name0)
-    check01, itr = comm(command01, 2)
+    check01, itr = comm(command01, 5, 10)
     ts01 = time.time()
     tt = np.around((ts01-ts00), decimals=2)
     # check01 == 0 if all goes well
     if check01 == 0:
         H01 = open('SSH_log.txt', 'a')
         H01.write("SSH {0} TTT= {1} s i= {2}\n".format(name0, tt, itr))
+        H01.close()
     else:
         E01 = open("SSH_error.txt", 'a')
         E01.write("Connection error for {0} TTT = {1} s \n".format(name0, tt))
+        E01.close()
 
     # SCP the same files to a local directory with same name
     command02 = "scp {1}:~/*{0}*.H ./{0}/".format(name0, server)
     ts10 = time.time()
-    check02, itr = comm(command02, 2)
+    check02, itr = comm(command02, 5, 10)
     ts11 = time.time()
     tt = np.around((ts11-ts10), decimals=2)
     im_file = glob.glob("{0}/*.H".format(name0))
@@ -128,24 +136,28 @@ def get_Images(name0, num0):
     if len(im_file) == num0:
         H02 = open('SCP_log.txt', 'a')
         H02.write("SCP {0} TTT= {1} s i= {2}\n".format(name0, tt, itr))
+        H02.close()
     else:
         E02 = open("SCP_less.txt", 'a')
         app_text = "Received files {0}/{1} ".format((num0-len(im_file)), num0)
         app_text += "image(s) less for {0}\n".format(name0)
         E02.write(app_text)
+        E02.close()
 
     # SSH delete command to server, to remove all copied file from ~/
     ts20 = time.time()
     command025 = "ssh {1} 'rm -rf *{0}*H'".format(name0, server)
-    check025, itr = comm(command025, 3)
+    check025, itr = comm(command025, 10, 15)
     ts21 = time.time()
     tt = np.around((ts21-ts20), decimals=2)
     if check025 == 0:
         H025 = open('RM_log.txt', 'a')
         H025.write("RM {0} TTT= {1} s i= {2}\n".format(name0, tt, itr))
+        H025.close()
     else:
         E025 = open('RM_error.txt', 'a')
         E025.write("RM error {0} TTT = {1} s\n".format(name0, tt))
+        E025.close()
 
     return
 
@@ -200,8 +212,8 @@ def a2c(img, hduid=0):
                                                 w.wcs_pix2world(c, 0, 1)]
     Co = [[r0, d0], [r1, d1], [r2, d2], [r3, d3]]
     Co = np.around(np.array(Co), decimals=4)
-    # Last step is not required, but just in case we need to print them
-    # it will look clean.
+    # Above step is not required, but just in case we need to print them
+    # it will look clean
 
     return Co.tolist()
 
@@ -215,7 +227,7 @@ def Extras(name0):
     :returns: TODO
 
     """
-    pass
+
     command04 = "for file in {0}/*arch; ".format(name0)
     command04 += "do mv ${file} ${file/arch/fits}; done"
     comm(command04, 2)
@@ -236,7 +248,7 @@ def Input_file(dir):
 
     """
     I = open("{0}/Input.txt".format(dir), 'w')
-    J = open("{0}/Failed_wcs.txt".format(dir), 'w')
+    # J = open("{0}/Failed_wcs.txt".format(dir), 'w')
     input_count = 0
 
     files = glob.glob("{0}/*fits".format(dir))
@@ -252,27 +264,30 @@ def Input_file(dir):
                 fi_in = os.path.basename(fi)
                 I = open("{0}/Input.txt".format(dir), 'a')
                 I.write(fi_in+'\n')
+                I.close()
                 input_count += 1
             elif(x1 != 4096 or x2 != 4110):
                 fi_in = os.path.basename(fi)
                 L = open("{0}/Failed_Mask.txt".format(dir), 'a')
                 L.write(fi_in+'\n')
+                L.close()
             else:
                 fi_in = os.path.basename(fi)
-                print "Weird", fi_in, x1, x2
                 J = open("{0}/Failed_wcs.txt".format(dir), 'a')
                 J.write(fi_in+'\n')
+                J.close()
         except:
             fi_in = os.path.basename(fi)
-            print "Fail", fi_in
             J = open("{0}/Failed_wcs.txt".format(dir), 'a')
             J.write(fi_in+'\n')
+            J.close()
     if (len(files) - input_count > 0):
         w_e = len(files)-input_count
         WCS_E = open("WCS_error.txt", 'a')
         app_text = "{0} has {1} images out of ".format(dir, w_e)
         app_text += "{0}  which have poor WCS\n".format(len(files))
         WCS_E.write(app_text)
+        WCS_E.close()
 
     return input_count
 
@@ -282,7 +297,7 @@ clip_sig = 4.0
 ID_list = np.loadtxt("/data1/visitor/cakshat/CRTS_id_num_R.txt", dtype=np.str)
 # count = 0
 
-end = np.min((index + 1, len(ID_list)))
+end = np.min((index + 40, len(ID_list)))
 for name, num in ID_list[index:end]:
 
     num = int(num)
@@ -340,12 +355,17 @@ for name, num in ID_list[index:end]:
         app_text = "{0} coadded CT {1} TTT {2} for ".format(name, coadd, taken)
         app_text += "{0}/ {1} images\n".format(count06, num)
         G07.write(app_text)
+        G07.close()
     else:
         E07 = open("Coadd_FAIL.txt", 'a')
         E07.write("{0} FAILED CT {1} TTT {2}\n".format(name, coadd, taken))
+        E07.close()
 
     im = glob.glob("{0}/*fits".format(name))
-    size = os.path.getsize(im[0])/1e9  # size in GB
+    try:
+        size = os.path.getsize(im[0])/1e9  # size in GB
+    except:
+        size = 0
     if size > 0.7:
         ts90 = time.time()
         command09 = "rm -rvf {0}/*fits".format(name)
@@ -354,28 +374,36 @@ for name, num in ID_list[index:end]:
         tt = np.around((ts91-ts90), decimals=2)
         if check09 == 0:
             E09 = open("Scatter.txt", 'a')
-            E09.write("Sc {0} TTT= {1} s Size= {2} \n".format(name, tt, size))
-            E95 = open("{0}/Scatter.txt".format(name), 'a')
-            E95.write("Sc {0} TTT= {1} s Size= {2}\n".format(name, tt, size))
+            E09.write("Sc {0} TTT= {1} s Size= {2} G\n".format(name, tt, size))
+            E09.close()
+            fname = "{0}/Scatter.txt".format(name)
+            E99 = open(fname, 'a+')
+            E99.write("Sc {0} TTT= {1} s Size= {2} G\n".format(name, tt, size))
+            E99.close()
         else:
             E09 = open("Scatter_del_err.txt", 'a')
             E09.write("Scatter Error {0} TTT= {1} s\n".format(name, tt))
-            E95 = open("{0}/Scatter_del_err.txt".format(name), 'a')
-            E95.write("Scatter {0} TTT= {1} s\n".format(name, tt))
+            E09.close()
+            fname = "{0}/Scatter_del_err.txt".format(name)
+            E95 = open(fname, 'a+')
+            E95.write("Scatter Error {0} TTT= {1} s\n".format(name, tt))
+            E95.close()
     else:
         pass
 
     ts100 = time.time()
-    command10 = "scp -r {0} {1}".format(name, disk_dump)
-    check10, itr = comm(command10, 2)
+    command10 = "scp -r {0} *txt {1}".format(name, disk_dump)
+    check10, itr = comm(command10, 3)
     ts101 = time.time()
     tt = np.around((ts101-ts100), decimals=2)
     if check10 == 0:
         H10 = open('DD_log.txt', 'a')
         H10.write("DISKED {0} TTT= {1} s i= {2}\n".format(name, tt, itr))
+        H10.close()
     else:
         E10 = open("DD_error.txt", 'a')
         E10.write("DiskDump error for {0} TTT = {1} s \n".format(name, tt))
+        E10.close()
 
     ts110 = time.time()
     command11 = "rm -rvf {0}".format(name)
@@ -385,6 +413,8 @@ for name, num in ID_list[index:end]:
     if check11 == 0:
         H10 = open('PRM_log.txt', 'a')
         H10.write("Delete {0} TTT= {1} s i= {2}\n".format(name, tt, itr))
+        H10.close()
     else:
         E10 = open("PRM_error.txt", 'a')
         E10.write("Delete error for {0} TTT = {1} s\n".format(name, tt))
+        E10.close()
