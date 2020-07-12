@@ -13,7 +13,7 @@ Due to some initial crashes the coadding process was divided into different phas
   * bsub_CRTS.py
   * sc_CRTS_new.py
   * swarp_conf_varun_edit.swarp
-  * Mask_S.fits
+  * [Mask_S.fits](https://drive.google.com/file/d/1ocMkvuA4lURhDvn7RexaMpjFlWUZUxtn/view?usp=sharing)
   
 ### Logfiles in Phase 1:
 * File name: **wcs_error_list.txt**
