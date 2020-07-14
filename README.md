@@ -23,6 +23,13 @@ Due to some initial crashes the coadding process was divided into different phas
    3. "tot" - Total number of images in that field
   
 * File name: **Coadd_FAIL.txt**
+  * Columns:
+   1. Field 
+   2. F 
+   3. C 
+   4. Co-T 
+   5. T 
+   6. To-T 
 
 
 ### Logfiles in Phase 2: 
@@ -40,7 +47,33 @@ Due to some initial crashes the coadding process was divided into different phas
   
 
  * File name: **Sc_Coadd_FAIL.txt**
+   * Columns:
+   1. Field 
+   2. F 
+   3. C 
+   4. Co-T 
+   5. T 
+   6. To-T 
+   7. date 
+   8. time
+ 
  * File name: **SSE_Coadd_FAIL.txt**
+   * Columns:
+   1. Field 
+   2. F 
+   3. C 
+   4. Co-T 
+   5. T 
+   6. To-T 
+   7. date 
+   8. time
+ 
  * File name: **FITS.txt**
+ output of `ls -lh \*fits` in the directory where all the final co-adds are stored. 
  * File name: **CORD_coord.txt**
+   * Columns
+     * Field 
+     * r1, d1, r2, d2, r3, d3, r4, d4, r0, d0
+     * CT
+     * CN
 
