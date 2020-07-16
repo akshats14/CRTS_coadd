@@ -47,30 +47,27 @@ Due to some initial crashes the coadding process was divided into different phas
 
 ### Logfiles in Phase-2: 
  * File name: **scatter_list.txt**
-   * Columns: 
-    1. "Field" - Name of the field
-    2. "Less scattered" - Among the images which are coadd-able, number of images which are clustered to small space in sky. (These are the images which were finally coadded)
-    3. "Good WCS" - Number of Images whose WCS is appropriate, but their position in sky may or may be as per requirement
-    4. "Failed Mask" - Number of images which does not overlap exactly with the mask
-    5. "Poor WCS" - Number of images whose WCS does not return any error while reading but is not similar to other images
-    6. "Failed WCS" - Number of images whose WCS returned error while reading 
-    7. "tot" - Total number of images in that field
-    8. "fr" - Number of less scattered images / Total images (fraction of images which were coadded) (Rounded to 1 decimal)
-    9. "na" - First character of the Field name. Usually the ones with value 'N' or 'S' have more science content, but for completeness we added 'F' and 'U' (explained in the paper)
-  
-
+  * Columns: 
+   1. "Field" - Name of the field
+   2. "Less scattered" - Among the images which are coadd-able, number of images which are clustered to small space in sky. (These are the images which were finally coadded)
+   3. "Good WCS" - Number of Images whose WCS is appropriate, but their position in sky may or may be as per requirement
+   4. "Failed Mask" - Number of images which does not overlap exactly with the mask
+   5. "Poor WCS" - Number of images whose WCS does not return any error while reading but is not similar to other images
+   6. "Failed WCS" - Number of images whose WCS returned error while reading 
+   7. "tot" - Total number of images in that field
+   8. "fr" - Number of less scattered images / Total images (fraction of images which were coadded) (Rounded to 1 decimal)
+   9. "na" - First character of the Field name. Usually the ones with value 'N' or 'S' have more science content, but for completeness we added 'F' and 'U' (explained in the paper)
  * File name: **Sc_Coadd_FAIL.txt**
-   * List of all the fields which were removed in Phase-1 but could not successfully co-add in the Phase-2 either, while running sc_CRTS_new.py. This file was meant to be both human readable and machine readable. Along with the fields the columns also store the time taken to run (failed) co-adding command, the total time taken by process the field, along with the date and time of execution
-   * Columns:
-   1. Field - Name of the field that failed during co-addition
-   2. F - Redundant: for human readability. Signifies that this field failed
-   3. C - Redundant: for human readability. Signifies Coadd-time
-   4. Co-T - Time taken (in sec) to run (failed) co-adding command
-   5. T - Redundant: for human readability. Signifies Total Time Taken (TTT)
-   6. To-T - total time taken by process the field (in sec)
-   7. date - Date of execution
-   8. time - Time of execution
- 
+  * List of all the fields which were removed in Phase-1 but could not successfully co-add in the Phase-2 either, while running sc_CRTS_new.py. This file was meant to be both human readable and machine readable. Along with the fields the columns also store the time taken to run (failed) co-adding command, the total time taken by process the field, along with the date and time of execution
+  * Columns:
+  1. Field - Name of the field that failed during co-addition
+  2. F - Redundant: for human readability. Signifies that this field failed
+  3. C - Redundant: for human readability. Signifies Coadd-time
+  4. Co-T - Time taken (in sec) to run (failed) co-adding command
+  5. T - Redundant: for human readability. Signifies Total Time Taken (TTT)
+  6. To-T - total time taken by process the field (in sec)
+  7. date - Date of execution
+  8. time - Time of execution
  * File name: **SSE_Coadd_FAIL.txt**
   * List of all the fields which failed in Phase-1 due to ssh/scp error but could not successfully co-add in the Phase-2, while running sc_CRTS_new.py. This file was meant to be both human readable and machine readable. Along with the fields the columns also store the time taken to run (failed) co-adding command, the total time taken by process the field, along with the date and time of execution
   * Columns:
@@ -82,7 +79,6 @@ Due to some initial crashes the coadding process was divided into different phas
   6. To-T - total time taken by process the field (in sec)
   7. date - Date of execution
   8. time - Time of execution
- 
  * File name: **FITS.txt**
   * output of `ls -lh *fits` in the directory where all the final co-adds are stored. Size of the co-add can be a pseudo measure for the quality of the co-add image, which is explained in the paper as well. 
  * File name: **CORD_coord.txt**
