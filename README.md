@@ -19,7 +19,7 @@ Due to some initial crashes the coadding process was divided into different phas
 
   * **swarp_conf_varun.swarp** - It is a modified version of default configuration files necessary for SWarp software. These configuration parameters will be overwritten when the SWarp command is given additional flags. The python code allows the user to modify some of the useful configuration. The reason for the choices of the parameters have been explained in the paper.
 
-  * [**Mask_S.fits**](https://drive.google.com/file/d/1ocMkvuA4lURhDvn7RexaMpjFlWUZUxtn/view?usp=sharing) - Not all of the pixels of the camera (CCD) records the light correctly and some are rather dead, hence one has to mask out those pixels by giving them zero weights.  
+  * **Mask_S.fits** - Not all of the pixels of the camera (CCD) records the light correctly and some are rather dead, hence one has to mask out those pixels by giving them zero weights.  
   
 ## Software tools necessary to reproduce/analyse CRTS co-add
   * [SWarp](https://github.com/astromatic/swarp)
