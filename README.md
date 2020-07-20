@@ -5,7 +5,7 @@ Here we present some extra information, which is not mentioned in the paper. It 
 The **Appendix.pdf** has some detailed information about the reasons due to which some images couldn't be included into the co-add.
 In the Appendix we also compare the limiting magnitude of outcome of coadding using different algorithms, and lastly a brief discussion on size of the coadded images and its importance. 
 
-If 2 images are very far from each other (in sky location), their coadd will consist of a large spherical rectangle which circumscribes both the images. For images with large separation, the size of the coadd could be very large, hence several images were discarded in order to limit the size of the final output. Another reason for discarding an image could be, having a poor meta file, which we defined as a description for the columns of **scatter_list.txt** .  
+If 2 images are very far from each other (in sky location), their coadd will consist of a large spherical rectangle which circumscribes both the images. For images with large separation, the size of the coadd could be very large, hence several images were discarded in order to limit the size of the final output. Another reason for discarding an image could be, having a poor metadata file, which we defined as a description for the columns of **scatter_list.txt** .  
 
 Due to some initial crashes the coadding process was divided into different phases and we share the output of log files which contains information on which fields had at least one image rejected. Also, if a final output co-add file was greater than 700MB, they were deleted and were co-added again without scattered images in Phase-2.
 
@@ -15,11 +15,11 @@ Due to some initial crashes the coadding process was divided into different phas
 
   * **bsub_CRTS.py** - Co-adding all the ~8000 CRTS fields is computationally demanding for a single CPU, hence it is advised to distribute the workload to multiple CPUs in parallel, where 1 CPU co-adds 1 field at a time. It is less time efficient to allot multiple CPUs for single field co-add as compared to 1 CPU per field. Since for this study we had a different server for the storage ~0.8 million CRTS images and a different server to be used to co-add them, some of the functions are dedicated to moving data at the correct place. Hence some users may have to modify those functions accordingly. As per the current structure of the code, along with this code, the user would need CRTS_id_num.txt/CRTS_id_num_R.txt, swarp_conf_varun.swarp and all the necessary images to be co-added along with Mask_S.fits in a same directory.  Users must make sure they modify the addresses in the code accordingly. 
 
-  * **sc_CRTS_new.py** - As discussed, images which are separated very far apart are not co-added as it will significantly increase the output size and will have no incremental scientific value in terms of depth/limiting magnitude of the image. Hence the fields which were deleted in Phase-1 run, were co-added by the newer code, which ignore the scattered images more efficiently. This code has more detailed log system and 
+  * **sc_CRTS_new.py** - As discussed, images which are separated very far apart are not co-added as it will significantly increase the output size and will have no incremental scientific value in terms of depth/limiting magnitude of the image. Hence the fields which were deleted in Phase-1 run, were co-added by the newer code, which ignore the scattered images more efficiently. This code has more detailed log system and :x: :warning: Missing something? :x:
 
   * **swarp_conf_varun.swarp** - It is a modified version of default configuration files necessary for SWarp software. These configuration parameters will be overwritten when the SWarp command is given additional flags. The python code allows the user to modify some of the useful configuration. The reason for the choices of the parameters have been explained in the paper.
 
-  * **Mask_S.fits** - Not all of the pixels of the camera (CCD) records the light correctly and some are rather dead, hence one has to mask out those pixels by giving them zero weights.  
+  * **Mask_S.fits** - Dead or otherwise problematic pixels of the CCD camera were masked out in the coadding process, by assigning zero weights to them. 
   
 ## Software tools necessary to reproduce/analyse CRTS co-add
   * [SWarp](https://github.com/astromatic/swarp)
@@ -32,7 +32,7 @@ Due to some initial crashes the coadding process was divided into different phas
     * Columns:
     1. "Field" - Name of the field
     2. "wcs_err" - Number of files which were rejected due to WCS not being appropriate for the coadd
-    3. "tot" - Total number of images in that field
+    3. "tot" - Total number of images in that field :x: :warning: clarify if this includes rejected images (it seems it does) :x:
   
   * File name: **Coadd_FAIL.txt**
     * List of all the fields which failed the co-addition process in the Phase-1, while running bsub_CRTS.py. This file was meant to be both human readable and machine readable. Along with the fields the columns also store the time taken to run (failed) co-adding command, the total time taken by process the field, along with the date and time of execution
@@ -86,7 +86,7 @@ Due to some initial crashes the coadding process was divided into different phas
     * This file contains all 4 corner coordinates (RA,Dec) in degrees and the center RA, Dec of all the co-added fields. 
     * Columns:
     1. Field - Name of the field
-    2. r1, d1, r2, d2, r3, d3, r4, d4, r0, d0 - 5 sets RA,Dec (ri,di, for i ->0,1,2,3,4) of each co-added image
+    2. r1, d1, r2, d2, r3, d3, r4, d4, r0, d0 - 5 sets RA,Dec (ri,di, for i ->0,1,2,3,4) of each co-added image :x: :warning: ordering: 1-4-0 or 0-4 :x:
     3. CT - Actual number of co-added images for that field
     4. CN - Total number of images in CRTS repository for that field 
     
