@@ -32,7 +32,7 @@ Due to some initial crashes the coadding process was divided into different phas
     * Columns:
     1. "Field" - Name of the field
     2. "wcs_err" - Number of files which were rejected due to WCS not being appropriate for the coadd
-    3. "tot" - Total number of images in that field :x: :warning: clarify if this includes rejected images (it seems it does) :x:
+    3. "tot" - Total number of images in that field, which includes both the rejected images and the images which were included
   
   * File name: **Coadd_FAIL.txt**
     * List of all the fields which failed the co-addition process in the Phase-1, while running bsub_CRTS.py. This file was meant to be both human readable and machine readable. Along with the fields the columns also store the time taken to run (failed) co-adding command, the total time taken by process the field, along with the date and time of execution
@@ -86,7 +86,7 @@ Due to some initial crashes the coadding process was divided into different phas
     * This file contains all 4 corner coordinates (RA,Dec) in degrees and the center RA, Dec of all the co-added fields. 
     * Columns:
     1. Field - Name of the field
-    2. r1, d1, r2, d2, r3, d3, r4, d4, r0, d0 - 5 sets RA,Dec (ri,di, for i ->0,1,2,3,4) of each co-added image :x: :warning: ordering: 1-4-0 or 0-4 :x:
+    2. r1, d1, r2, d2, r3, d3, r4, d4, r0, d0 - 5 sets RA,Dec (ri,di, for i ->[1,2,3,4,0]) of each co-added image. i->[1,2,3,4] denotes 4 corners of the rectangular image and i->0 denotes the central RA, Dec
     3. CT - Actual number of co-added images for that field
     4. CN - Total number of images in CRTS repository for that field 
     
