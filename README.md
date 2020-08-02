@@ -1,13 +1,7 @@
 # CRTS coadd 
-This is a repository regarding the co-additions of the CRTS all-sky survey. 
-Here we present some extra information, which is not mentioned in the paper. It also contains all the necessary files (and some temporary files) required to recreate the work (users must have a separate access to the raw CRTS images).
+This is a repository of co-added images from the Catalina Sky Survey (CSS) and Catalina Realtime Transient Survey (CRTS). This repository serves as a companion to the paper (DOI) and contains additional information and details. It also contains all the necessary files required to recreate the work (users must have a separate access to the raw CRTS images) or similarly process a different set of images with appropriate changes to the config files.
 
-The **Appendix.pdf** has some detailed information about the reasons due to which some images couldn't be included into the co-add.
-In the Appendix we also compare the limiting magnitude of outcome of coadding using different algorithms, and lastly a brief discussion on size of the coadded images and its importance. 
-
-If 2 images are very far from each other (in sky location), their coadd will consist of a large spherical rectangle which circumscribes both the images. For images with large separation, the size of the coadd could be very large, hence several images were discarded in order to limit the size of the final output. Another reason for discarding an image could be, having a poor metadata file, which we defined as a description for the columns of **scatter_list.txt** .  
-
-Due to some initial crashes the coadding process was divided into different phases and we share the output of log files which contains information on which fields had at least one image rejected. Also, if a final output co-add file was greater than 700MB, they were deleted and were co-added again without scattered images in Phase-2.
+The **Appendix.pdf** has various plots and details about certain exclusions. We have also presented the comparison of the limiting magnitude of when different coadding algorithms are used.
 
 
 ## Files necessary to reproduce CRTS co-addition
