@@ -80,7 +80,7 @@ The **Appendix.pdf** has various plots and details about certain exclusions. We 
     * This file contains all 4 corner coordinates (RA,Dec) in degrees and the center RA, Dec of all the co-added fields. 
     * Columns:
     1. Field - Name of the field
-    2. r1, d1, r2, d2, r3, d3, r4, d4, r0, d0 - 5 sets RA,Dec (ri,di, for i ->[1,2,3,4,0]) of each co-added image. i->[1,2,3,4] denotes 4 corners of the rectangular image and i->0 denotes the central RA, Dec
+    2. r1, d1, r2, d2, r3, d3, r4, d4 - 4 sets RA,Dec (ri,di, for i ->[1,2,3,4]) of each co-added image. i->[1,2,3,4] denotes 4 corners of the rectangular image
     3. CT - Actual number of co-added images for that field
     4. CN - Total number of images in CRTS repository for that field 
     
